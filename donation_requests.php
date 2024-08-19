@@ -11,52 +11,41 @@ if(empty($_SESSION['user_id'])){
 
 <div class="container">
     <h1>Donation Requests</h1>
-
     <?php
-    // Flash messages
-    // if (isset($_SESSION['flash_messages']) && !empty($_SESSION['flash_messages'])) {
-    //     $message = $_SESSION['flash_messages'][0];
-    //     echo '<div id="flash-message" class="alert alert-' . htmlspecialchars($message['category']) . '">';
-    //     echo htmlspecialchars($message['message']);
-    //     echo '</div>';
-    //     // Clear the flash message after displaying it
-    //     unset($_SESSION['flash_messages']);
-    // }
-    ?>
-
-<?php
-    if(isset($_POST['submit'])){
+    if(isset($_POST['submit'])) {
     
         $donation_id = $_POST["donation_id"];
-        $status =$_POST["status"];
-        $update_query=mysqli_query($conn,"UPDATE donation  SET status = '$status' WHERE donation_id = $donation_id");
-                // cur.execute("SELECT donation.units,user.blood_group,blood_stock.units from donation inner join user on user.user_id = donation.user_id join blood_stock on blood_stock.bloodgroup = user.blood_group where donation_id = %s",[donation_id])
-        // $query = mysqli_query($conn,"SELECT donation.units,user.blood_group,blood_stock.units from donation inner join user on user.user_id = donation.user_id join blood_stock on blood_stock.bloodgroup = user.blood_group where donation_id = ",[donation_id])";
+        $status = $_POST["status"];
+        $update_query = mysqli_query($conn, "UPDATE donation SET status = '$status' WHERE donation_id = $donation_id");
+
         if ($update_query) {
-            $select_query = $conn->prepare("SELECT donation.units,user.blood_group,blood_stock.units from donation inner join user on user.user_id = donation.user_id join blood_stock on blood_stock.bloodgroup = user.blood_group where donation_id =  ?");
+            $select_query = $conn->prepare("SELECT donation.units, user.blood_group 
+                                            FROM donation 
+                                            INNER JOIN user ON user.user_id = donation.user_id 
+                                            WHERE donation_id = ?");
             $select_query->bind_param("s", $donation_id);
             $select_query->execute();
             $result = $select_query->get_result();
 
-
-    // Check if any rows were returned
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                // $_SESSION["user_id"] = $row["user_id"];
                 $bloodgroup = $row["blood_group"];
-            }
+                $units_donated = $row["units"];
 
+                if ($status == "accepted") {
+                    // Increase the blood stock
+                    $update_stock = $conn->prepare("UPDATE blood_stock SET units = units + ? WHERE bloodgroup = ?");
+                    $update_stock->bind_param("is", $units_donated, $bloodgroup);
+                    $update_stock->execute();
 
-
-            if ($status == "accepted") {
-                echo '<div class="alert alert-success" role="alert">
-                    Donation request accepted!
-                    </div>';
-            } else if ($status == 'rejected') {
-
-                echo '<div class="alert alert-danger" role="alert">
+                    echo '<div class="alert alert-success" role="alert">
+                        Donation request accepted, and blood stock updated!
+                        </div>';
+                } else if ($status == 'rejected') {
+                    echo '<div class="alert alert-danger" role="alert">
                         Donation request rejected!
                         </div>';
+                }
             }
         } else {
             echo '<div class="alert alert-danger" role="alert">
@@ -64,8 +53,7 @@ if(empty($_SESSION['user_id'])){
             </div>';
         }
     }
-?>
-
+    ?>
     <table class="table">
         <thead>
             <tr>
@@ -82,7 +70,9 @@ if(empty($_SESSION['user_id'])){
         <tbody>
             <?php
             // Fetch donation requests from the database
-            $qery = $conn->prepare("SELECT donation_id,username, blood_group, units, disease, donated_date, phone_number,status FROM user JOIN donation ON user.user_id = donation.user_id");
+            $qery = $conn->prepare("SELECT donation_id, username, blood_group, units, disease, donated_date, phone_number, status 
+                                    FROM user 
+                                    JOIN donation ON user.user_id = donation.user_id");
             $qery->execute();
             $result = $qery->get_result();
 
@@ -123,6 +113,5 @@ if(empty($_SESSION['user_id'])){
         </tbody>
     </table>
 </div>
-
 
 <?php include('footer.php'); ?>
