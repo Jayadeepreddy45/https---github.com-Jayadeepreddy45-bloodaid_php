@@ -1,17 +1,30 @@
 <?php include('header.php');?>
+
+<?php
+if(empty($_SESSION['user_id'])){
+    header('Location: login.php');
+    exit();
+}
+?>
+
 <?php
     include('database.php');
     if(isset($_POST['submit'])){
         $units = $_POST['units'];
         $Disease = $_POST['disease'];
-        $Donateddate = $_POST['donated-date'];
-
-        $qery = mysqli_query($conn ,"INSERT into donation(units,disease,donated_date) VALUES('$units','$Disease','$Donateddate')");
+        $Donateddate = $_POST['donated_date'];
+        $userid = $_SESSION["user_id"];
+        $qery = mysqli_query($conn ,"INSERT into donation(user_id,units,disease,donated_date) VALUES($userid,'$units','$Disease','$Donateddate')");
 
         if($qery){
-            echo "<script>alert('Donation request sucessful')</script>";
+            echo '<div class="alert alert-success" role="alert">
+            Donation request sucessful!
+            </div>';
+
         } else{
-            echo "<script>alert('error')</script>";
+            echo  '<div class="alert alert-danger" role="alert">
+            Donation request failed!
+            </div>';
         }
 
     }
@@ -34,7 +47,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="donated-date" class="form-label">Donated date</label>
-                    <input type="date" class="form-control" id="donated-date" name="donated-date" required>
+                    <input type="date" class="form-control" id="donated-date" name="donated_date" required>
                 </div>
                 <div class="d-grid">
                     <button class="btn btn-primary bg-danger" name="submit" type="submit">Donate</button>

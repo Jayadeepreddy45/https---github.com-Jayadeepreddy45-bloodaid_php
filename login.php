@@ -1,35 +1,46 @@
 <?php include('header.php'); ?>
 
 <?php
-    include('database.php');
+include('database.php');
 
-    if (isset($_POST['username']) && isset($_POST['password'])) {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-        // Prepare a statement
-        $qery = $conn->prepare("SELECT * FROM user WHERE username = ?");
-        $qery->bind_param("s", $username); // "s" denotes the type as string
+    // Prepare a statement
+    $qery = $conn->prepare("SELECT * FROM user WHERE username = ?");
+    $qery->bind_param("s", $username); // "s" denotes the type as string
 
-        // Execute the statement
-        $qery->execute();
+    // Execute the statement
+    $qery->execute();
 
-        // Store the result
-        $result = $qery->get_result();
+    // Store the result
+    $result = $qery->get_result();
 
-        // Check if any rows were returned
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            // You should also validate the password here
-            // For simplicity, assume login is successful
-            echo "<script>alert('Login successful')</script>";
+    // Check if any rows were returned
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        // You should also validate the password here
+        // For simplicity, assume login is successful
+        echo "('Login successful')";
+        
+        $_SESSION["user_id"] = $row["user_id"];
+        $_SESSION["username"] = $row["username"];
+        $_SESSION["role_id"] = $row["role_id"];
+        if ($row["role_id"] == 2) {
+            header('Location: donorform.php');
         } else {
-            echo "<script>alert('Invalid username or password')</script>";
+            header('Location: blood_stock.php');
         }
-
-        // Close the statement
-        $qery->close();
+        exit();
+    } else {
+        echo "<script>alert('Invalid username or password')</script>";
     }
+
+
+    // Close the statement
+    $qery->close();
+}
 ?>
 
 <!-- Centered container -->
