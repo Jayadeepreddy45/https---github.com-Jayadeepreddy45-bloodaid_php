@@ -10,9 +10,18 @@ if(empty($_SESSION['user_id'])){
 <?php include('database.php'); ?>
 
 <div class="container">
-    <h1>Donation History</h1>
-    <table class="table">
-        <thead>
+    <h1>DONATIONS HISTORY</h1>
+   
+            <?php
+            // Fetch donation requests from the database
+            $qery = $conn->prepare("SELECT donation_id,username, blood_group, units, disease, donated_date, phone_number,status FROM user JOIN donation ON user.user_id = donation.user_id");
+            $qery->execute();
+            $result = $qery->get_result();
+
+            // Loop through each donation request
+            if ($result->num_rows > 0) {
+            echo ' <table class="table">
+                    <thead class="table-dark">
             <tr>
                 <th>Donation ID</th>
                 <th>Username</th>
@@ -24,14 +33,7 @@ if(empty($_SESSION['user_id'])){
                 <th>Status Requests</th>
             </tr>
         </thead>
-        <tbody>
-            <?php
-            // Fetch donation requests from the database
-            $qery = $conn->prepare("SELECT donation_id,username, blood_group, units, disease, donated_date, phone_number,status FROM user JOIN donation ON user.user_id = donation.user_id");
-            $qery->execute();
-            $result = $qery->get_result();
-
-            // Loop through each donation request
+        <tbody>';
             while ($donor = $result->fetch_assoc()) {
                 ?>
                 <tr>
@@ -46,6 +48,11 @@ if(empty($_SESSION['user_id'])){
                 </tr>
                 <?php
             }
+        } else {
+            echo '<div class="alert alert-primary" role="alert">
+                    No Donor history found!
+            </div>';
+        }
 
             // Close the statement
             $qery->close();

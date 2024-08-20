@@ -33,9 +33,10 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         }
         exit();
     } else {
-        echo "<script>alert('Invalid username or password')</script>";
+        echo '<div class="alert alert-danger" style="position: absolute; top: 10%; left: 50%; transform: translateX(-50%); text-align: center; width: 275px; margin-top: 20px;" role="alert">
+            Invalid username or password!..
+            </div>';
     }
-
 
     // Close the statement
     $qery->close();
@@ -43,9 +44,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 ?>
 
 <!-- Centered container -->
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
+<div class="container d-flex justify-content-center align-items-center min-vh-100" style="margin-top: -50px; position: relative;">
     <div class="col-md-4 col-lg-3 mt-1"> <!-- Adjusted margin-top here -->
-        <h1 class="text-center mb-4">Login</h1>
+        <h1 class="text-center mb-4">LOGIN</h1>
 
         <form action="login.php" method="post">
             <div class="mb-3">

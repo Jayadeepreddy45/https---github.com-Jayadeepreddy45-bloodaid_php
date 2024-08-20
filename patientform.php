@@ -43,7 +43,7 @@ if(empty($_SESSION['user_id'])){
                 </div>
                 <div class="mb-3">
                     <label for="requested_date" class="form-label">Requested Date</label>
-                    <input type="date" class="form-control" id="requested_date" name="requested_date" required>
+                    <input type="date" class="form-control" id="requested_date" name="requested_date" min="2024-01-01" required>
                 </div>
                 <div class="d-grid">
                     <button class="btn btn-danger" name="submit" type="submit">Request</button>

@@ -10,22 +10,8 @@ if(empty($_SESSION['user_id'])){
 <?php include('database.php'); ?>
 
 <div class="container">
-    <h1>Patients History</h1>
+    <h1>PATIENTS HISTORY</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>request id</th>
-                <th>Username</th>
-                <th>Blood Group</th>
-                <th>Units</th>
-                <th>Reason</th>
-                <th>Date</th>
-                <th>Phone Number</th>
-                <th>Status Requests</th>
-            </tr>
-        </thead>
-        <tbody>
             <?php
             // Fetch donation requests from the database
             $qery = $conn->prepare("SELECT request_id,username, blood_group, units, reason, requested_date, phone_number,status FROM user JOIN patient_requests ON user.user_id = patient_requests.user_id");
@@ -33,6 +19,21 @@ if(empty($_SESSION['user_id'])){
             $result = $qery->get_result();
 
             // Loop through each donation request
+            if ($result->num_rows > 0) {
+                echo ' <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Username</th>
+                        <th>Blood Group</th>
+                        <th>Units</th>
+                        <th>Reason</th>
+                        <th>Date</th>
+                        <th>Phone Number</th>
+                        <th>Status Requests</th>
+                    </tr>
+                </thead>';
+            
             while ($patient = $result->fetch_assoc()) {
                 ?>
                 <tr>
@@ -47,6 +48,11 @@ if(empty($_SESSION['user_id'])){
                 </tr>
                 <?php
             }
+        } else {
+            echo '<div class="alert alert-primary" role="alert">
+                    No Patient history found!
+            </div>';
+        }
 
             // Close the statement
             $qery->close();

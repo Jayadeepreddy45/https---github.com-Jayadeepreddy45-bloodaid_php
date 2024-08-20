@@ -47,7 +47,7 @@ if(empty($_SESSION['user_id'])){
                 </div>
                 <div class="mb-3">
                     <label for="donated-date" class="form-label">Donated date</label>
-                    <input type="date" class="form-control" id="donated-date" name="donated_date" required>
+                    <input type="date" class="form-control" id="donated-date" name="donated_date" min="2024-01-01"  required>
                 </div>
                 <div class="d-grid">
                     <button class="btn btn-primary bg-danger" name="submit" type="submit">Donate</button>

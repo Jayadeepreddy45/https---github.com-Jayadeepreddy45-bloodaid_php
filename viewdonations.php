@@ -9,16 +9,8 @@ if(empty($_SESSION['user_id'])){
 
 <?php include('database.php');?>
 <div class="container">
-    <h1>Donation history</h1>
-   <table class="table">
-     <thead>
-         <tr>
-             <th>Units</th>
-             <th>Disease</th>
-             <th>date</th>
-             <th>Status requests</th>
-         </tr>
-     </thead>
+    <h1> DONATION LIST</h1>
+   
      <?php
         if (isset($_SESSION['user_id'])) { // Check if user_id is set in the session
             $user_id = $_SESSION['user_id'];
@@ -31,6 +23,15 @@ if(empty($_SESSION['user_id'])){
 
             // Check if any rows were returned
             if ($result->num_rows > 0) {
+                echo '<table class="table" style="margin-top:10px;">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Units</th>
+                                <th>Disease</th>
+                                <th>date</th>
+                                <th>Status requests</th>
+                            </tr>
+                        </thead>';
                 while ($row = $result->fetch_assoc()) {
                     ?>
                     <tr>

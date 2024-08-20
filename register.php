@@ -16,11 +16,11 @@
         $exists->bind_param("s", $username); // "s" denotes the type as string
         // Execute the statement
         $exists->execute();
-        if($exists){
-          echo '<div class="alert alert-danger" role="alert">
+        $result = $exists->get_result();
+        if ($result->num_rows > 0) {
+                echo '<div class="alert alert-danger" role="alert">
                         Username already exists
                         </div>';
-
         }
         else{
         $qery = mysqli_query($conn ,"INSERT into user(username,password,phone_number,blood_group,dob,address,city,state,pin_code) VALUES('$username','$password','$phonenumber','$bloodgroup','$dob','$address','$city','$state','$pincode')");
@@ -40,7 +40,9 @@
 ?>
 <div class="container justify-content-center align-items-center min-vh-100 mt-5 col-lg-3">
     <form class="row g-3" action="register.php" method="post">
+      <h1 class="text-center">REGISTER</h1>
         <div class="col-md-6">
+
           <label for="inputEmail4" class="form-label">Username</label>
           <input type="text" class="form-control" id="inputEmail4" name="Username" required>
         </div>

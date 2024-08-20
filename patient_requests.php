@@ -10,7 +10,7 @@ if (empty($_SESSION['user_id'])) {
 <?php include('database.php'); ?>
 
 <div class="container">
-    <h1>Patient Requests</h1>
+    <h1>PATIENT REQUESTS</h1>
     <?php
     if (isset($_POST['submit'])) {
 
@@ -54,20 +54,7 @@ if (empty($_SESSION['user_id'])) {
         }
     }
     ?>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Request ID</th>
-                <th>Username</th>
-                <th>Blood Group</th>
-                <th>Units</th>
-                <th>Reason</th>
-                <th>Date</th>
-                <th>Phone Number</th>
-                <th>Status Requests</th>
-            </tr>
-        </thead>
-        <tbody>
+    
             <?php
             // Fetch patient requests from the database
             $qery = $conn->prepare("SELECT request_id, username, blood_group, units, reason, requested_date, phone_number, status 
@@ -77,6 +64,20 @@ if (empty($_SESSION['user_id'])) {
             $result = $qery->get_result();
 
             // Loop through each patient request
+            if ($result->num_rows > 0) {
+                echo ' <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Username</th>
+                        <th>Blood Group</th>
+                        <th>Units</th>
+                        <th>Reason</th>
+                        <th>Date</th>
+                        <th>Phone Number</th>
+                        <th>Status Requests</th>
+                    </tr>
+                </thead>';
             while ($patient = $result->fetch_assoc()) {
                 ?>
                 <tr>
@@ -106,7 +107,11 @@ if (empty($_SESSION['user_id'])) {
                 </tr>
                 <?php
             }
-
+        } else {
+            echo '<div class="alert alert-primary" role="alert">
+                No requests found !
+                </div>';
+        }
             // Close the statement
             $qery->close();
             ?>

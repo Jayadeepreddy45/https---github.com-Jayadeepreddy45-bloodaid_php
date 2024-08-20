@@ -18,7 +18,7 @@ $result = $qery->get_result();
 ?>
 
 <div class="container mt-5">
-    <h1>Blood Stock</h1>
+    <h1>BLOOD STOCK</h1>
     <div class="row">
         <?php
         // Check if there are rows to display
