@@ -8,9 +8,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $password = $_POST['password'];
 
     // Prepare a statement
-    $qery = $conn->prepare("SELECT * FROM user WHERE username = ?");
-    $qery->bind_param("s", $username); // "s" denotes the type as string
-
+    $qery = $conn->prepare("SELECT * FROM user WHERE username = ? and password = ?");
+    $qery->bind_param("ss", $username, $password); // "s" denotes the type as string
     // Execute the statement
     $qery->execute();
 
