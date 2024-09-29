@@ -16,12 +16,12 @@ if (empty($_SESSION['user_id'])) {
 
         $request_id = $_POST["request_id"];
         $status = $_POST["status"];
-        $update_query = mysqli_query($conn, "UPDATE patient_requests SET status = '$status' WHERE request_id = $request_id");
+        $update_query = mysqli_query($conn, "UPDATE patient_request SET status = '$status' WHERE request_id = $request_id");
 
         if ($update_query) {
-            $select_query = $conn->prepare("SELECT patient_requests.units, user.blood_group 
-                                            FROM patient_requests 
-                                            INNER JOIN user ON user.user_id = patient_requests.user_id 
+            $select_query = $conn->prepare("SELECT patient_request.units, user.blood_group 
+                                            FROM patient_request
+                                            INNER JOIN user ON user.user_id = patient_request.user_id 
                                             WHERE request_id = ?");
             $select_query->bind_param("s", $request_id);
             $select_query->execute();
@@ -59,7 +59,7 @@ if (empty($_SESSION['user_id'])) {
             // Fetch patient requests from the database
             $qery = $conn->prepare("SELECT request_id, username, blood_group, units, reason, requested_date, phone_number, status 
                                     FROM user 
-                                    JOIN patient_requests ON user.user_id = patient_requests.user_id");
+                                    JOIN patient_request ON user.user_id = patient_request.user_id");
             $qery->execute();
             $result = $qery->get_result();
 

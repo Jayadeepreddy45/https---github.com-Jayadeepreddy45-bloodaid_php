@@ -14,7 +14,7 @@ if(empty($_SESSION['user_id'])){
 
             <?php
             // Fetch donation requests from the database
-            $qery = $conn->prepare("SELECT request_id,username, blood_group, units, reason, requested_date, phone_number,status FROM user JOIN patient_requests ON user.user_id = patient_requests.user_id");
+            $qery = $conn->prepare("SELECT request_id,username, blood_group, units, reason, requested_date, phone_number,status FROM user JOIN patient_request ON user.user_id = patient_request.user_id");
             $qery->execute();
             $result = $qery->get_result();
 

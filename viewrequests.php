@@ -12,7 +12,7 @@ if(empty($_SESSION['user_id'])){
      <?php
         if (isset($_SESSION['user_id'])) { // Check if user_id is set in the session
             $user_id = $_SESSION['user_id'];
-            $qery = $conn->prepare("SELECT units, reason, requested_date, status FROM patient_requests WHERE user_id = ?");
+            $qery = $conn->prepare("SELECT units, reason, requested_date, status FROM patient_request WHERE user_id = ?");
             $qery->bind_param("s", $user_id);
             $qery->execute();
 
