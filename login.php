@@ -13,14 +13,13 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     // Execute the statement
     $qery->execute();
 
-    // Store the result
+    // Stores the result
     $result = $qery->get_result();
 
     // Check if any rows were returned
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        // You should also validate the password here
-        // For simplicity, assume login is successful
+       
         echo "('Login successful')";
         
         $_SESSION["user_id"] = $row["user_id"];
